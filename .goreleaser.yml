@@ -1,0 +1,47 @@
+project_name: clash-tools
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: clash-tools
+    main: ./cmd/clash_tools
+    binary: clash-tools
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      # Go build info 会自动记录从 tag 推导出的版本，
+      # 这里预留位置，如果以后需要以 ldflags 注入版本信息可在代码中使用变量。
+
+archives:
+  - id: default
+    builds:
+      - clash-tools
+    format_overrides:
+      - goos: windows
+        format: zip
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: "checksums_{{ .Version }}.txt"
+
+changelog:
+  sort: desc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+
