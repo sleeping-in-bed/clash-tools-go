@@ -50,7 +50,7 @@ jobs:
 
   goreleaser:
     # 只在 release 事件时运行（即 semantic-release 创建/发布 Release 之后）
-    if: github.event_name == 'release'
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     steps:
