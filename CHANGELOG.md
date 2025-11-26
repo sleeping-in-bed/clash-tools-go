@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/sleeping-in-bed/clash-tools-go/compare/v1.0.0...v1.0.1) (2025-11-26)
+
+
+### Bug Fixes
+
+* fix bug ([80b3a7b](https://github.com/sleeping-in-bed/clash-tools-go/commit/80b3a7ba2566d076e7522d2546103468b59d0495))
+
 # 1.0.0 (2025-11-26)
 
 
