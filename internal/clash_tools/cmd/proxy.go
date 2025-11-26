@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
 
-	"clash-tools-go/internal/clash_tools/config"
+	"github.com/sleeping-in-bed/clash-tools-go/internal/clash_tools/config"
 )
 
 type clashConfig struct {

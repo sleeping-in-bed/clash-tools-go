@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"clash-tools-go/internal/clash_tools/config"
+	"github.com/sleeping-in-bed/clash-tools-go/internal/clash_tools/config"
 )
 
 var rootCmd = &cobra.Command{

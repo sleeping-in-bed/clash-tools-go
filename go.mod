@@ -1,4 +1,4 @@
-module clash-tools-go
+module github.com/sleeping-in-bed/clash-tools-go
 
 go 1.25.3
 
