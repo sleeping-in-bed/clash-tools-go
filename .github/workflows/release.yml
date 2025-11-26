@@ -19,7 +19,8 @@ permissions:
 
 jobs:
   semantic-release:
-    if: github.event_name == 'push'
+    # 只在分支 push 时运行（不在 tag push / release 事件时运行）
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
     runs-on: ubuntu-latest
 
     steps:
@@ -50,7 +51,7 @@ jobs:
 
   goreleaser:
     # 只在 release 事件时运行（即 semantic-release 创建/发布 Release 之后）
-    if: github.event_name == 'push'
+    if: github.event_name == 'release'
     runs-on: ubuntu-latest
 
     steps:
