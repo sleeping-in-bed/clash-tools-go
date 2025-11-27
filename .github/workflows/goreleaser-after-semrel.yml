@@ -1,0 +1,65 @@
+name: GoReleaser after Semantic Release
+
+on:
+  workflow_run:
+    # 监听上面这个 semantic-release workflow（名字叫 "Release"）
+    workflows: ["Release"]
+    types:
+      - completed
+  # 手动触发（调试用）
+  workflow_dispatch:
+
+jobs:
+  goreleaser:
+    # 只在 Release workflow 成功并且针对 main 分支时运行
+    if: >
+      github.event_name == 'workflow_run' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Detect release tag on HEAD
+        id: check
+        run: |
+          set -e
+          TAG=$(git describe --tags --exact-match 2>/dev/null || echo "")
+          if [ -z "$TAG" ]; then
+            echo "No tag on HEAD; semantic-release did not publish a new version. Skipping GoReleaser."
+            echo "has_release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Found tag: $TAG"
+            echo "has_release=true" >> "$GITHUB_OUTPUT"
+            echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout release tag
+        if: steps.check.outputs.has_release == 'true'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ steps.check.outputs.tag }}
+
+      - name: Setup Go
+        if: steps.check.outputs.has_release == 'true'
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Run GoReleaser
+        if: steps.check.outputs.has_release == 'true'
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
