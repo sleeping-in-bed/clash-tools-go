@@ -9,6 +9,9 @@ on:
   # 手动触发（调试用）
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   goreleaser:
     # 只在 Release workflow 成功并且针对 main 分支时运行
