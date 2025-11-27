@@ -36,6 +36,11 @@ archives:
 checksum:
   name_template: "checksums_{{ .Version }}.txt"
 
+release:
+  # 额外把编译好的二进制文件也直接上传到 GitHub Release
+  extra_files:
+    - glob: "dist/clash-tools_*/*clash-tools*"
+
 changelog:
   sort: desc
   filters:
